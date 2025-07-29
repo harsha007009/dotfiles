@@ -1,0 +1,22 @@
+CompileFlags:
+  Add:
+    # Basic C++ standard
+    - -std=c++17
+    # Common system include paths (adjust these based on your system)
+    - -IC:/msys64/mingw64/include/c++/13.2.0
+    - -IC:/msys64/mingw64/include/c++/13.2.0/x86_64-w64-mingw32
+    - -IC:/msys64/mingw64/include
+    # Alternative paths
+    - -IC:/MinGW/include
+    - -IC:/MinGW/include/c++
+    # Suppress some warnings for learning
+    - -Wno-unused-variable
+    - -Wno-unused-parameter
+    
+Diagnostics:
+  ClangTidy:
+    Remove:
+      # Disable pedantic warnings
+      - readability-*
+      - google-*
+      - modernize-*

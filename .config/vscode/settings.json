@@ -1,0 +1,138 @@
+{
+  "workbench.editor.empty.hint": "hidden",
+  "editor.fontFamily": "JetBrains Mono",
+  "editor.fontLigatures": true,
+  "sqldeveloper.sqlHistory.historyLimit": 500,
+  "sqldeveloper.telemetry.enabled": false,
+  "leetcode.workspaceFolder": "d:\\problemsolving\\practise",
+  "leetcode.hint.configWebviewMarkdown": false,
+  "leetcode.hint.commentDescription": false,
+  "labuladong-leetcode.workspaceFolder": "d:\\problemsolving\\practise",
+  "labuladong-leetcode.endpoint": "leetcode",
+
+  "workbench.iconTheme": "symbols",
+  "editor.fontSize": 14,
+
+  "tailwindCSS.experimental.configFile": "src/style.css",
+
+  "files.autoSave": "afterDelay",
+  "leetcode.enableSideMode": false,
+  "lldb.suppressUpdateNotifications": true,
+  "files.autoSaveDelay": 0,
+  "explorer.confirmDragAndDrop": false,
+  "liveServer.settings.donotVerifyTags": true,
+
+  "terminal.integrated.sendKeybindings": true,
+
+  "vim.leader": "<space>",
+  "vim.insertModeKeyBindings": [
+    {
+      "before": ["j", "j"],
+      "after": ["<Esc>"]
+    }
+  ],
+
+  "github.copilot.enable": {
+    "*": false
+  },
+
+  "vim.handleKeys": {
+    "<C-q>": false,
+    "<C-c>": false,
+    "<C-s>": false,
+    "<C-a>": false,
+    "<C-h>": false,
+    "<C-j>": false,
+    "<C-k>": false,
+    "<C-d>": false,
+    "<C-l>": false,
+    "<space>": true
+  },
+
+  "notes.notesLocation": "d:\\vim motions",
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+  "workbench.colorTheme": "Vesper",
+  "editor.minimap.enabled": false,
+  "window.autoDetectColorScheme": true,
+  "workbench.preferredDarkColorTheme": "Sequoia Moonlight",
+
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "chat.mcp.discovery.enabled": true,
+
+  "liveServer.settings.donotShowInfoMsg": true,
+  "explorer.confirmDelete": false,
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "leetcode.hint.setDefaultLanguage": false,
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "[cpp]": {
+    "editor.defaultFormatter": "ms-vscode.cpptools"
+  },
+
+  // ✅ GLOBAL C++ COMPILER SETUP
+  "C_Cpp.default.compilerPath": "C:/mingw64/bin/g++.exe",
+  "C_Cpp.default.intelliSenseMode": "windows-gcc-x64",
+  "C_Cpp.default.cppStandard": "c++20",
+  "C_Cpp.default.cStandard": "c17",
+  "security.workspace.trust.untrustedFiles": "open",
+  "workbench.colorCustomizations": {
+    "[Vira*]": {
+      "toolbar.activeBackground": "#80CBC426",
+      "button.background": "#80CBC4",
+      "button.hoverBackground": "#80CBC4cc",
+      "extensionButton.separator": "#80CBC433",
+      "extensionButton.background": "#80CBC414",
+      "extensionButton.foreground": "#80CBC4",
+      "extensionButton.hoverBackground": "#80CBC433",
+      "extensionButton.prominentForeground": "#80CBC4",
+      "extensionButton.prominentBackground": "#80CBC414",
+      "extensionButton.prominentHoverBackground": "#80CBC433",
+      "activityBarBadge.background": "#80CBC4",
+      "activityBar.activeBorder": "#80CBC4",
+      "activityBarTop.activeBorder": "#80CBC4",
+      "list.inactiveSelectionIconForeground": "#80CBC4",
+      "list.activeSelectionForeground": "#80CBC4",
+      "list.inactiveSelectionForeground": "#80CBC4",
+      "list.highlightForeground": "#80CBC4",
+      "sash.hoverBorder": "#80CBC480",
+      "list.activeSelectionIconForeground": "#80CBC4",
+      "scrollbarSlider.activeBackground": "#80CBC480",
+      "editorSuggestWidget.highlightForeground": "#80CBC4",
+      "textLink.foreground": "#80CBC4",
+      "progressBar.background": "#80CBC4",
+      "pickerGroup.foreground": "#80CBC4",
+      "tab.activeBorder": "#80CBC4",
+      "tab.activeBorderTop": "#80CBC400",
+      "tab.unfocusedActiveBorder": "#80CBC4",
+      "tab.unfocusedActiveBorderTop": "#80CBC400",
+      "tab.activeModifiedBorder": "#80CBC400",
+      "notificationLink.foreground": "#80CBC4",
+      "editorWidget.resizeBorder": "#80CBC4",
+      "editorWidget.border": "#80CBC4",
+      "settings.modifiedItemIndicator": "#80CBC4",
+      "panelTitle.activeBorder": "#80CBC4",
+      "breadcrumb.activeSelectionForeground": "#80CBC4",
+      "menu.selectionForeground": "#80CBC4",
+      "menubar.selectionForeground": "#80CBC4",
+      "editor.findMatchBorder": "#80CBC4",
+      "selection.background": "#80CBC440",
+      "statusBarItem.remoteBackground": "#80CBC414",
+      "statusBarItem.remoteHoverBackground": "#80CBC4",
+      "statusBarItem.remoteForeground": "#80CBC4",
+      "notebook.inactiveFocusedCellBorder": "#80CBC480",
+      "commandCenter.activeBorder": "#80CBC480",
+      "chat.slashCommandForeground": "#80CBC4",
+      "chat.avatarForeground": "#80CBC4",
+      "activityBarBadge.foreground": "#000000",
+      "button.foreground": "#000000",
+      "statusBarItem.remoteHoverForeground": "#000000"
+    }
+  },
+  "git.openRepositoryInParentFolders": "never"
+}

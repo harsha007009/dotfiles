@@ -4,9 +4,7 @@ This repository contains my configuration files for Neovim and VSCode.
 
 ---
 
-## Neovim
 
-Configuration files are located in `~/.config/nvim`.
 
 To use:
 

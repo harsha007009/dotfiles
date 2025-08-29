@@ -18,15 +18,16 @@ This setup uses the **DockLike** theme with advanced settings enabled, giving th
 ## Theme Used
 - **Theme:** DockLike  
 - **Custom Settings:** Advanced  
-- **Config File:** [./Windhawk/config.txt](./Windhawk/config.txt)  
+- **Config File:** [./Windhawk/config.txt](config.txt)  
 
 ## How to Use
 1. Install [Windhawk](https://windhawk.net/).  
 2. Install the **Windows 11 Taskbar Styler** mod.  
-3. Copy the contents of [`config.txt`](./Windhawk/config.txt) into Windhawk’s settings for the Taskbar Styler mod.  
+3. Copy the contents of [`config.txt`](config.txt) into Windhawk’s settings for the Taskbar Styler mod.  
 4. Apply the theme in Windhawk to style your taskbar.  
 
 ---
 
-💡 Tip: You can fork this repo and tweak [`config.txt`](./Windhawk/config.txt) to experiment with your own styles.
+💡 Tip: You can fork this repo and tweak [`config.txt`](config.txt) to experiment with your own styles.
+
 

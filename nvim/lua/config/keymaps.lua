@@ -7,11 +7,25 @@ keymap("t", "<C-l>", [[<C-\><C-n><C-w>l]], opts)
 keymap("t", "<C-j>", [[<C-\><C-n><C-w>j]], opts)
 keymap("t", "<C-k>", [[<C-\><C-n><C-w>k]], opts)
 
--- 🔍 Telescope keybindings
+-- � Disable Ctrl+N globally (except terminal-mode) so it doesn't move down or trigger completion
+keymap({ "n", "i", "v", "x", "s", "o" }, "<C-n>", "<Nop>", { noremap = true, silent = true, desc = "Disable Ctrl+N" })
+
+-- �🔍 Telescope keybindings
 keymap("n", "<leader>ff", "<cmd>Telescope find_files<CR>", { desc = "Find Files" })
 keymap("n", "<leader>fb", "<cmd>Telescope buffers<CR>", { desc = "Find Buffers" })
 keymap("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { desc = "Help Tags" })
 keymap("n", "<leader>fs", "<cmd>Telescope lsp_document_symbols<CR>", { desc = "Document Symbols" })
+
+-- 🔒 Toggle modifiable setting
+keymap("n", "<leader>tm", function()
+  if vim.bo.modifiable then
+    vim.bo.modifiable = false
+    vim.notify("Buffer is now read-only", vim.log.levels.INFO)
+  else
+    vim.bo.modifiable = true
+    vim.notify("Buffer is now modifiable", vim.log.levels.INFO)
+  end
+end, { desc = "Toggle Modifiable" })
 
 -- 🖱️ Ctrl+A to select all text
 keymap("n", "<C-a>", "ggVG", opts)
@@ -92,7 +106,8 @@ keymap("x", "<S-k>", ":move '<-2<CR>gv=gv", opts) -- Up
 
 -- 📜 Page navigation using Ctrl+U and Ctrl+D
 keymap("n", "<C-u>", "<C-u>", opts) -- Page up (default)
-keymap("n", "<C-d>", "<C-d>", opts) -- Page down (default)
+-- Removed normal-mode <C-d> mapping to free it for Visual Multi
+-- keymap("n", "<C-d>", "<C-d>", opts) -- Page down (default)
 
 -- 📜 Page navigation using Shift+H and Shift+L (like Ctrl+U and Ctrl+D)
 keymap("n", "<S-h>", "<C-u>", opts) -- Page up with Shift+H
@@ -114,8 +129,7 @@ keymap("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
 keymap("n", "<leader>cs", "<cmd>lua vim.lsp.buf.document_symbol()<CR>", opts)
 
 -- 📋 LSP Symbol picker (like in the image)
-keymap("n", "<leader>p", function()
-  -- Use Telescope for LSP document symbols
+keymap("n", "<leader>o", function()
   require("telescope.builtin").lsp_document_symbols()
 end, { desc = "LSP Symbols" })
 
@@ -128,10 +142,6 @@ keymap("n", "<leader>gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
 keymap("i", "jk", "<Esc>", opts)
 keymap("v", "jk", "<Esc>", opts)
 keymap("s", "jk", "<Esc>", opts)
-
-
-
-
 
 -- ⚡ Enable == for formatting (built-in indent formatting)
 keymap("n", "==", "==", { desc = "Format Current Line" })
@@ -204,3 +214,9 @@ end, { desc = "Toggle Modifiable" })
 -- ⏲️ Set escape timeout
 vim.o.timeout = true
 vim.o.timeoutlen = 250
+
+-- Always enter visual block mode with Ctrl+V in all modes
+vim.keymap.set({"n", "v", "x", "s", "o"}, "<C-v>", "<C-v>", { noremap = true, silent = true, desc = "Visual Block Mode" })
+-- Some terminals intercept Ctrl+V (paste). Provide reliable fallbacks:
+vim.keymap.set({"n", "v", "x", "s", "o"}, "<C-q>", "<C-v>", { noremap = true, silent = true, desc = "Visual Block Mode (Fallback)" })
+vim.keymap.set({"n", "v", "x", "s", "o"}, "<M-v>", "<C-v>", { noremap = true, silent = true, desc = "Visual Block Mode (Alt+V)" })

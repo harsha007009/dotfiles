@@ -23,14 +23,19 @@ return {
                     },
                 },
                 keymap = {
-                    ["<Tab>"] = { "select_next", "fallback" },
-                    ["<S-Tab>"] = { "select_prev", "fallback" },
-                    ["<CR>"] = { "accept", "fallback" },
+                    ["<C-f>"] = {},
+                    -- Better completion navigation
                     ["<C-n>"] = { "select_next", "fallback" },
                     ["<C-p>"] = { "select_prev", "fallback" },
-                    ["<C-j>"] = { "select_next", "fallback" },
-                    ["<C-k>"] = { "select_prev", "fallback" },
-                    ["<C-y>"] = { "accept", "fallback" },
+                    ["<C-j>"] = { "scroll_documentation_down", "fallback" },
+                    ["<C-k>"] = { "scroll_documentation_up", "fallback" },
+                    ["<Tab>"] = { "select_next", "fallback" },
+                    ["<S-Tab>"] = { "select_prev", "fallback" },
+                    -- Enter key accepts current selection or selects first if none selected
+                    ["<CR>"] = { "accept", "select_and_accept", "fallback" },
+                    ["<C-e>"] = { "cancel", "fallback" },
+                    -- Allow clicking with mouse
+                    ["<LeftMouse>"] = { "accept", "fallback" },
                 },
                 cmdline = {
                     enabled = false,
@@ -40,15 +45,14 @@ return {
                     },
                 },
                 completion = {
-                    accept = {
-                        auto_brackets = {
-                            enabled = true,
-                        },
-                    },
                     menu = {
-                        border = nil,
+                        border = "rounded",
                         scrolloff = 1,
-                        scrollbar = false,
+                        scrollbar = true,
+                        -- Enable mouse support for clicking on suggestions
+                        auto_show = true,
+                        -- Auto-select first item in completion menu
+                        selection = "auto_insert",
                         draw = {
                             columns = {
                                 { "kind_icon" },
@@ -58,28 +62,38 @@ return {
                             },
                         },
                     },
+                    documentation = {
+                        window = {
+                            border = "rounded",
+                            scrollbar = true,
+                            winhighlight = 'Normal:BlinkCmpDoc,FloatBorder:BlinkCmpDocBorder,EndOfBuffer:BlinkCmpDoc',
+                            -- Make documentation window focusable and scrollable
+                            focusable = true,
+                        },
+                        auto_show = true,
+                        auto_show_delay_ms = 300,
+                    },
+                    -- Enable mouse support for completion
+                    accept = {
+                        auto_brackets = {
+                            enabled = true,
+                        },
+                        -- Create undo point before accepting completion
+                        create_undo_point = true,
+                    },
                     ghost_text = {
                         enabled = true,
                     },
-                    documentation = {
-                        window = {
-                            border = nil,
-                            scrollbar = false,
-                            winhighlight = 'Normal:BlinkCmpDoc,FloatBorder:BlinkCmpDocBorder,EndOfBuffer:BlinkCmpDoc',
+                    -- Trigger completion automatically
+                    trigger = {
+                        signature_help = {
+                            enabled = true,
+                            blocked_trigger_characters = {},
                         },
-                        auto_show = true,
-                        auto_show_delay_ms = 500,
-                        keymap = {
-                            ["<C-u>"] = { "scroll_documentation_up" },
-                            ["<C-d>"] = { "scroll_documentation_down" },
-                            ["<C-b>"] = { "scroll_documentation_up" },
-                            ["<C-f>"] = { "scroll_documentation_down" },
-                            ["<PageUp>"] = { "scroll_documentation_up" },
-                            ["<PageDown>"] = { "scroll_documentation_down" },
-                            ["<Up>"] = { "scroll_documentation_up" },
-                            ["<Down>"] = { "scroll_documentation_down" },
-                            ["<Esc>"] = { "hide_documentation" },
-                            ["q"] = { "hide_documentation" },
+                        completion = {
+                            -- Show completion menu automatically after typing
+                            keyword_length = 1,
+                            blocked_trigger_characters = { " ", "\n", "\t" },
                         },
                     },
                 },

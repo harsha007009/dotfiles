@@ -17,45 +17,37 @@ return {
         html = { "prettier" },
         css = { "prettier" },
         markdown = { "prettier" },
-        c = { "clang_format" },
-        cpp = { "clang_format" },
-        objc = { "clang_format" },
-        objcpp = { "clang_format" },
+        -- Use clang-format now that it's installed via Mason
+        cpp = { "clang-format" },
+        c = { "clang-format" },
       },
       
-      -- Configure formatters with better timeout and error handling
+      -- Configure formatters
       formatters = {
-        prettier = {
-          timeout_ms = 10000, -- Increase timeout to 10 seconds
-          prepend_args = { "--tab-width", "2", "--print-width", "80" },
-        },
-        clang_format = {
-          timeout_ms = 5000,
-        },
-        stylua = {
-          timeout_ms = 5000,
-        },
-        stylua = {
-          timeout_ms = 5000,
+        ["clang-format"] = {
+          command = "clang-format",
+          args = { "--style=file", "--fallback-style=llvm" },
+          stdin = true,
+          timeout_ms = 5000, -- Increase timeout to 5 seconds
         },
       },
+      
+      -- Disable automatic formatting for specific languages
+      format_on_save = function(bufnr)
+        -- Disable format on save for C/C++ files
+        local filetype = vim.bo[bufnr].filetype
+        if filetype == "cpp" or filetype == "c" then
+          return false
+        end
+        return true
+      end,
     },
     keys = {
       -- Manual format keybinding
       {
         "<leader>fm",
         function()
-          require("conform").format({
-            async = true,
-            lsp_fallback = true,
-            timeout_ms = 10000,
-          }, function(err)
-            if err then
-              vim.notify("Format failed: " .. tostring(err), vim.log.levels.WARN)
-            else
-              vim.notify("File formatted successfully", vim.log.levels.INFO)
-            end
-          end)
+          require("conform").format({ async = true, lsp_fallback = true })
         end,
         desc = "Format Document",
         mode = { "n", "v" },
@@ -64,22 +56,21 @@ return {
       {
         "<leader>fs",
         function()
-          require("conform").format({
-            async = true,
-            lsp_fallback = true,
-            timeout_ms = 10000,
-          }, function(err)
-            if err then
-              vim.notify("Format failed: " .. tostring(err), vim.log.levels.WARN)
-            else
-              local success, save_err = pcall(vim.cmd, "write")
-              if not success then
-                vim.notify("Save failed: " .. tostring(save_err), vim.log.levels.WARN)
-              else
-                vim.notify("File formatted and saved", vim.log.levels.INFO)
-              end
-            end
+          -- Format with increased timeout and better error handling
+          local ok, err = pcall(function()
+            require("conform").format({ 
+              async = false, -- Use synchronous formatting to avoid interruption
+              timeout_ms = 5000, -- 5 second timeout
+              lsp_fallback = true 
+            })
           end)
+          
+          if not ok then
+            vim.notify("Formatting failed: " .. tostring(err), vim.log.levels.WARN)
+          end
+          
+          -- Save the file
+          vim.cmd("write")
         end,
         desc = "Format and Save",
         mode = { "n", "v" },
@@ -88,14 +79,29 @@ return {
     config = function(_, opts)
       require("conform").setup(opts)
       
-      -- Simple auto-save without formatting on buffer leave
+      -- Format when closing buffer/file (but not while coding)
       vim.api.nvim_create_autocmd("BufWinLeave", {
         pattern = "*",
         callback = function(args)
           local buf = args.buf
           if vim.bo[buf].modified and vim.bo[buf].buftype == "" then
-            -- Just save, don't format automatically
-            pcall(vim.cmd, "write")
+            -- Format before closing if file was modified
+            require("conform").format({ bufnr = buf, lsp_fallback = true })
+          end
+        end,
+      })
+      
+      -- Also format on manual save (Ctrl+S or :w) - but respect language preferences
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        pattern = "*",
+        callback = function(args)
+          -- Only format on manual save, not auto-save
+          if not vim.g.auto_save_in_progress then
+            local filetype = vim.bo[args.buf].filetype
+            -- Skip auto-formatting for C/C++ on save, only format when explicitly requested
+            if filetype ~= "cpp" and filetype ~= "c" then
+              require("conform").format({ bufnr = args.buf, lsp_fallback = true })
+            end
           end
         end,
       })

@@ -7,94 +7,10 @@ keymap("t", "<C-l>", [[<C-\><C-n><C-w>l]], opts)
 keymap("t", "<C-j>", [[<C-\><C-n><C-w>j]], opts)
 keymap("t", "<C-k>", [[<C-\><C-n><C-w>k]], opts)
 
--- � Disable Ctrl+N globally (except terminal-mode) so it doesn't move down or trigger completion
-keymap({ "n", "i", "v", "x", "s", "o" }, "<C-n>", "<Nop>", { noremap = true, silent = true, desc = "Disable Ctrl+N" })
-
--- �🔍 Telescope keybindings
-keymap("n", "<leader>ff", "<cmd>Telescope find_files<CR>", { desc = "Find Files" })
-keymap("n", "<leader>fb", "<cmd>Telescope buffers<CR>", { desc = "Find Buffers" })
-keymap("n", "<leader>fh", "<cmd>Telescope help_tags<CR>", { desc = "Help Tags" })
-keymap("n", "<leader>fs", "<cmd>Telescope lsp_document_symbols<CR>", { desc = "Document Symbols" })
-
--- 🔒 Toggle modifiable setting
-keymap("n", "<leader>tm", function()
-  if vim.bo.modifiable then
-    vim.bo.modifiable = false
-    vim.notify("Buffer is now read-only", vim.log.levels.INFO)
-  else
-    vim.bo.modifiable = true
-    vim.notify("Buffer is now modifiable", vim.log.levels.INFO)
-  end
-end, { desc = "Toggle Modifiable" })
-
--- 🖱️ Ctrl+A to select all text
+-- Telescope find_files🖱️ Ctrl+A to select all text
 keymap("n", "<C-a>", "ggVG", opts)
 keymap("i", "<C-a>", "<Esc>ggVG", opts)
 keymap("v", "<C-a>", "ggVG", opts)
-
--- 💾 Ctrl+S to save + format (your main save keybind!)
-keymap("n", "<C-s>", function()
-  require("conform").format({ async = true, lsp_fallback = true })
-  vim.cmd("write")
-end, { desc = "Format and Save" })
-keymap("i", "<C-s>", function()
-  require("conform").format({ async = true, lsp_fallback = true })
-  vim.cmd("write")
-end, { desc = "Format and Save" })
-
--- 💾 Leader+fs to save + format
-keymap("n", "<leader>fs", function()
-  local bufnr = vim.api.nvim_get_current_buf()
-  local filetype = vim.bo[bufnr].filetype
-  
-  -- Debug: Check what formatters are available
-  local formatters = require("conform").list_formatters(bufnr)
-  vim.notify("Available formatters for " .. filetype .. ": " .. vim.inspect(formatters), vim.log.levels.INFO)
-  
-  local success = pcall(function()
-    require("conform").format({ 
-      bufnr = bufnr,
-      async = true, 
-      lsp_fallback = true,
-      range = {
-        start = { line = 0, character = 0 },
-        ["end"] = { line = vim.api.nvim_buf_line_count(bufnr) - 1, character = 0 }
-      }
-    })
-    vim.cmd("write")
-  end)
-  if not success then
-    vim.notify("Format and save failed", vim.log.levels.WARN)
-  else
-    vim.notify("Formatted and saved successfully", vim.log.levels.INFO)
-  end
-end, { desc = "Format and Save" })
-keymap("i", "<leader>fs", function()
-  local bufnr = vim.api.nvim_get_current_buf()
-  local filetype = vim.bo[bufnr].filetype
-  
-  -- Debug: Check what formatters are available
-  local formatters = require("conform").list_formatters(bufnr)
-  vim.notify("Available formatters for " .. filetype .. ": " .. vim.inspect(formatters), vim.log.levels.INFO)
-  
-  local success = pcall(function()
-    require("conform").format({ 
-      bufnr = bufnr,
-      async = true, 
-      lsp_fallback = true,
-      range = {
-        start = { line = 0, character = 0 },
-        ["end"] = { line = vim.api.nvim_buf_line_count(bufnr) - 1, character = 0 }
-      }
-    })
-    vim.cmd("write")
-  end)
-  if not success then
-    vim.notify("Format and save failed", vim.log.levels.WARN)
-  else
-    vim.notify("Formatted and saved successfully", vim.log.levels.INFO)
-  end
-end, { desc = "Format and Save" })
 
 -- 🪟 Split shortcuts
 keymap("n", "sh", ":split<CR>", opts) -- Horizontal
@@ -104,20 +20,13 @@ keymap("n", "sv", ":vsplit<CR>", opts) -- Vertical
 keymap("x", "<S-j>", ":move '>+1<CR>gv=gv", opts) -- Down
 keymap("x", "<S-k>", ":move '<-2<CR>gv=gv", opts) -- Up
 
--- 📜 Page navigation using Ctrl+U and Ctrl+D
-keymap("n", "<C-u>", "<C-u>", opts) -- Page up (default)
--- Removed normal-mode <C-d> mapping to free it for Visual Multi
--- keymap("n", "<C-d>", "<C-d>", opts) -- Page down (default)
+-- 📜 Page navigation using Shift+H and Shift+L
+keymap("n", "<S-h>", "<C-u>", opts) -- Page up
+keymap("n", "<S-l>", "<C-d>", opts) -- Page down
 
--- 📜 Page navigation using Shift+H and Shift+L (like Ctrl+U and Ctrl+D)
-keymap("n", "<S-h>", "<C-u>", opts) -- Page up with Shift+H
-keymap("n", "<S-l>", "<C-d>", opts) -- Page down with Shift+L
-
--- 🧭 Buffer navigation (Tab/Shift-Tab AND Alt+h/l)
+-- 🧭 Buffer navigation (use Tab / Shift+Tab)
 keymap("n", "<Tab>", ":bnext<CR>", opts)
 keymap("n", "<S-Tab>", ":bprevious<CR>", opts)
-keymap("n", "<A-l>", ":bnext<CR>", opts)     -- Alt+L for next buffer
-keymap("n", "<A-h>", ":bprevious<CR>", opts) -- Alt+H for prev buffer
 
 -- 📖 Hover docs
 keymap("n", "<S-k>", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
@@ -127,11 +36,6 @@ keymap("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
 
 -- 📑 Document symbols
 keymap("n", "<leader>cs", "<cmd>lua vim.lsp.buf.document_symbol()<CR>", opts)
-
--- 📋 LSP Symbol picker (like in the image)
-keymap("n", "<leader>o", function()
-  require("telescope.builtin").lsp_document_symbols()
-end, { desc = "LSP Symbols" })
 
 -- 🔍 LSP Go-to
 keymap("n", "<leader>gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
@@ -143,9 +47,27 @@ keymap("i", "jk", "<Esc>", opts)
 keymap("v", "jk", "<Esc>", opts)
 keymap("s", "jk", "<Esc>", opts)
 
--- ⚡ Enable == for formatting (built-in indent formatting)
-keymap("n", "==", "==", { desc = "Format Current Line" })
-keymap("v", "=", "=", { desc = "Format Selection" })
+-- 🎨 Manual formatting keybindings (while coding)
+keymap("n", "<leader>f", function()
+  require("conform").format({ async = true, lsp_fallback = true })
+end, { desc = "Format Buffer" })
+keymap("v", "<leader>f", function()
+  require("conform").format({ async = true, lsp_fallback = true })
+end, { desc = "Format Selection" })
+
+-- Quick save without extra formatting (already formats on save)
+keymap("n", "<leader>w", ":w<CR>", { desc = "Save File" })
+
+-- 💾 Ctrl+S to save and format manually
+keymap("n", "<C-s>", function()
+  require("conform").format({ async = true, lsp_fallback = true })
+  vim.cmd("write")
+end, { desc = "Format and Save" })
+keymap("i", "<C-s>", function()
+  vim.cmd("stopinsert")
+  require("conform").format({ async = true, lsp_fallback = true })
+  vim.cmd("write")
+end, { desc = "Format and Save" })
 
 -- 🔧 Completion and LSP Navigation Keybindings
 -- These will be set up when nvim-cmp loads
@@ -162,6 +84,57 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- 🔍 LSP Hover and Documentation
     keymap("n", "K", vim.lsp.buf.hover, { buffer = buffer, desc = "Hover Documentation" })
     keymap("n", "<leader>k", vim.lsp.buf.signature_help, { buffer = buffer, desc = "Signature Help" })
+    
+    -- 📖 Enhanced documentation navigation
+    keymap("n", "<S-k>", function()
+      -- Open hover documentation in a dedicated floating window
+      local float_opts = {
+        border = "rounded",
+        max_width = 80,
+        max_height = 20,
+        focusable = true,
+        close_events = { "BufLeave", "CursorMoved", "InsertEnter" },
+      }
+      vim.lsp.buf.hover(float_opts)
+    end, { buffer = buffer, desc = "Hover Documentation (Enhanced)" })
+    
+    -- 🧭 Documentation window navigation
+    keymap("n", "<leader>hj", function()
+      -- Focus the hover window if it exists and scroll down
+      local wins = vim.api.nvim_list_wins()
+      for _, win in ipairs(wins) do
+        local config = vim.api.nvim_win_get_config(win)
+        if config.relative ~= "" then -- floating window
+          vim.api.nvim_set_current_win(win)
+          vim.cmd("normal! <C-d>")
+          return
+        end
+      end
+    end, { buffer = buffer, desc = "Scroll Documentation Down" })
+    
+    keymap("n", "<leader>hk", function()
+      -- Focus the hover window if it exists and scroll up
+      local wins = vim.api.nvim_list_wins()
+      for _, win in ipairs(wins) do
+        local config = vim.api.nvim_win_get_config(win)
+        if config.relative ~= "" then -- floating window
+          vim.api.nvim_set_current_win(win)
+          vim.cmd("normal! <C-u>")
+          return
+        end
+      end
+    end, { buffer = buffer, desc = "Scroll Documentation Up" })
+    
+    keymap("n", "<leader>hq", function()
+      -- Close all floating windows
+      local wins = vim.api.nvim_list_wins()
+      for _, win in ipairs(wins) do
+        local config = vim.api.nvim_win_get_config(win)
+        if config.relative ~= "" then -- floating window
+          vim.api.nvim_win_close(win, false)
+        end
+      end
+    end, { buffer = buffer, desc = "Close Documentation Windows" })
     
     -- 🚀 LSP Actions
     keymap("n", "gd", vim.lsp.buf.definition, { buffer = buffer, desc = "Go to Definition" })
@@ -193,30 +166,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
--- � Save without formatting
-keymap("n", "<C-s>", ":w<CR>", { desc = "Save File" })
-keymap("i", "<C-s>", "<Esc>:w<CR>a", { desc = "Save File" })
-
--- �🔒 Toggle modifiable (read-only)
-keymap("n", "<leader>tm", function()
-  vim.bo.modifiable = not vim.bo.modifiable
-  if vim.bo.modifiable then
-    print("Buffer is now modifiable")
-  else
-    print("Buffer is now read-only")
-  end
-end, { desc = "Toggle Modifiable" })
-
--- 🎨 LazyVim built-in colorscheme switcher (with search!)
--- keymap("n", "<leader>tt", "<leader>uC", { desc = "LazyVim Colorscheme Switcher" })
--- Note: Use <leader>uC for LazyVim's built-in colorscheme switcher
-
 -- ⏲️ Set escape timeout
 vim.o.timeout = true
 vim.o.timeoutlen = 250
-
--- Always enter visual block mode with Ctrl+V in all modes
-vim.keymap.set({"n", "v", "x", "s", "o"}, "<C-v>", "<C-v>", { noremap = true, silent = true, desc = "Visual Block Mode" })
--- Some terminals intercept Ctrl+V (paste). Provide reliable fallbacks:
-vim.keymap.set({"n", "v", "x", "s", "o"}, "<C-q>", "<C-v>", { noremap = true, silent = true, desc = "Visual Block Mode (Fallback)" })
-vim.keymap.set({"n", "v", "x", "s", "o"}, "<M-v>", "<C-v>", { noremap = true, silent = true, desc = "Visual Block Mode (Alt+V)" })

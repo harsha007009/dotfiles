@@ -1,7 +1,7 @@
 return {
   -- Mason for LSP server management
   {
-  "mason-org/mason.nvim",
+    "williamboman/mason.nvim",
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, {
         "lua-language-server",
@@ -10,69 +10,31 @@ return {
         "css-lsp",
         "html-lsp",
         "tailwindcss-language-server",
+        "eslint_d",
         "luacheck",
-        "shellcheck",
+        "shellcheck", 
         "shfmt",
+        -- DAP for C++ debugging
+        "codelldb",
       })
     end,
   },
-
+  
   -- LSP Configuration
   {
     "neovim/nvim-lspconfig",
     opts = {
-      -- Configure individual LSP servers
       servers = {
-        lua_ls = {
-          settings = {
-            Lua = {
-              workspace = {
-                checkThirdParty = false,
-              },
-              completion = {
-                callSnippet = "Replace",
-              },
-            },
-          },
-        },
-        tsserver = {
-          settings = {
-            typescript = {
-              format = {
-                enable = true,
-              },
-              validate = {
-                enable = true,
-              },
-            },
-          },
-        },
         clangd = {
           cmd = {
-            "clangd",
+            "C:/mingw64/bin/clangd.exe",
             "--background-index",
             "--clang-tidy",
             "--header-insertion=iwyu",
             "--completion-style=detailed",
             "--function-arg-placeholders",
             "--fallback-style=llvm",
-          },
-        },
-        cssls = {},
-        html = {},
-        tailwindcss = {
-          settings = {
-            tailwindCSS = {
-              experimental = {
-                classRegex = {
-                  "tw`([^`]*)",
-                  "tw=\"([^\"]*)",
-                  "tw={\"([^\"}]*)",
-                  "tw\\.\\w+`([^`]*)",
-                  "tw\\(.*?\\)`([^`]*)",
-                },
-              },
-            },
+            "--query-driver=C:/mingw64/bin/gcc.exe,C:/mingw64/bin/g++.exe",
           },
         },
       },
